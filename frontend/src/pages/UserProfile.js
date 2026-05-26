@@ -41,11 +41,7 @@ function UserProfile() {
                 <div style={styles.grid}>
                     <div style={styles.inputGroup}>
                         <label style={styles.label}>Username</label>
-                        {isEditing ? (
-                            <input type="text" value={profile.username} style={{...styles.input, cursor: 'not-allowed'}} disabled />
-                        ) : (
-                            <div style={styles.value}>{profile.username}</div>
-                        )}
+                        <div style={styles.value}>{authData?.username || '—'}</div>
                     </div>
                     <div style={styles.inputGroup}>
                         <label style={styles.label}>Role</label>
@@ -54,50 +50,19 @@ function UserProfile() {
                 </div>
             </div>
 
-            <form onSubmit={handleSubmit}>
-                <div style={styles.panel}>
-                    <div style={{fontSize: '14px', fontWeight: '700', color: '#0f172a', marginBottom: '18px', textTransform: 'uppercase', letterSpacing: '0.5px'}}>📧 Personal Details</div>
-                    <div style={styles.grid}>
-                        <div style={styles.inputGroup}>
-                            <label style={styles.label}>Email</label>
-                            {isEditing ? (
-                                <input type="email" name="email" value={profile.email} onChange={handleChange} style={styles.input} />
-                            ) : (
-                                <div style={styles.value}>{profile.email || '—'}</div>
-                            )}
-                        </div>
-                        <div style={styles.inputGroup}>
-                            <label style={styles.label}>First Name</label>
-                            {isEditing ? (
-                                <input type="text" name="first_name" value={profile.first_name} onChange={handleChange} style={styles.input} />
-                            ) : (
-                                <div style={styles.value}>{profile.first_name || '—'}</div>
-                            )}
-                        </div>
-                        <div style={styles.inputGroup}>
-                            <label style={styles.label}>Last Name</label>
-                            {isEditing ? (
-                                <input type="text" name="last_name" value={profile.last_name} onChange={handleChange} style={styles.input} />
-                            ) : (
-                                <div style={styles.value}>{profile.last_name || '—'}</div>
-                            )}
-                        </div>
+            <div style={styles.panel}>
+                <div style={{fontSize: '14px', fontWeight: '700', color: '#0f172a', marginBottom: '18px', textTransform: 'uppercase', letterSpacing: '0.5px'}}>📧 Account Status</div>
+                <div style={styles.grid}>
+                    <div style={styles.inputGroup}>
+                        <label style={styles.label}>Status</label>
+                        <div style={styles.value}>✅ Active</div>
+                    </div>
+                    <div style={styles.inputGroup}>
+                        <label style={styles.label}>Member Since</label>
+                        <div style={styles.value}>2026</div>
                     </div>
                 </div>
-
-                <div style={styles.btnGroup}>
-                    {!isEditing ? (
-                        <button type="button" style={styles.button} onClick={() => setIsEditing(true)}>
-                            ✎ Edit Profile
-                        </button>
-                    ) : (
-                        <>
-                            <button type="submit" style={styles.button}>✓ Save Changes</button>
-                            <button type="button" style={styles.cancelBtn} onClick={() => setIsEditing(false)}>Cancel</button>
-                        </>
-                    )}
-                </div>
-            </form>
+            </div>
         </div>
     );
 }
