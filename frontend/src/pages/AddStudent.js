@@ -376,48 +376,63 @@ function AddStudent() {
                     </div>
                 </div>
 
-                    {/* ACADEMIC INFORMATION */}
-                    <div className="form-panel">
-                        <div className="panel-title"><span></span> Academic Information</div>
-                        <div className="form-grid">
-                            <div className="input-group">
-                                <label>Roll Number *</label>
-                                <input type="text" className="tech-input" placeholder="e.g., 2026-001"
-                                    name="roll_number" value={form.roll_number}
-                                    onChange={handleInputChange} required
-                                    aria-label="Roll number"
-                                />
-                            </div>
-                            <div className="input-group">
-                                <label>Class *</label>
-                                <input type="text" className="tech-input" placeholder="e.g., 10"
-                                    name="class_name" value={form.class_name}
-                                    onChange={handleInputChange} required
-                                    aria-label="Class"
-                                />
-                            </div>
-                            <div className="input-group">
-                                <label>Section</label>
-                                <input type="text" className="tech-input" placeholder="e.g., A"
-                                    name="section" value={form.section}
-                                    onChange={handleInputChange}
-                                    aria-label="Section"
-                                />
-                            </div>
-                            <div className="input-group">
-                                <label>Admission Number</label>
-                                <input type="text" className="tech-input" placeholder="e.g., ADM-552"
-                                    name="admission_number" value={form.admission_number}
-                                    onChange={handleInputChange}
-                                    aria-label="Admission number"
-                                />
-                            </div>
-                            <div className="input-group">
-                                <label>Admission Date</label>
-                                <input type="date" className="tech-input"
-                                    name="admission_date" value={form.admission_date}
-                                    onChange={handleInputChange}
-                                    aria-label="Admission date"
+
+                {/* ACADEMIC INFORMATION */}
+                <div style={styles.panel}>
+                    <div style={styles.panelTitle}>
+                        <span style={styles.panelTitleDot}></span> Academic Information
+                    </div>
+                    <div style={styles.formGrid}>
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>Roll Number *</label>
+                            <input type="text" style={styles.input} placeholder="e.g., 2026-001"
+                                name="roll_number" value={form.roll_number}
+                                onChange={handleInputChange} required
+                                aria-label="Roll number"
+                            />
+                        </div>
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>Class *</label>
+                            <input type="text" style={styles.input} placeholder="e.g., 10"
+                                name="class_name" value={form.class_name}
+                                onChange={handleInputChange} required
+                                aria-label="Class"
+                            />
+                        </div>
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>Section</label>
+                            <input type="text" style={styles.input} placeholder="e.g., A"
+                                name="section" value={form.section}
+                                onChange={handleInputChange}
+                                aria-label="Section"
+                            />
+                        </div>
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>Admission Number</label>
+                            <input type="text" style={styles.input} placeholder="e.g., ADM-552"
+                                name="admission_number" value={form.admission_number}
+                                onChange={handleInputChange}
+                                aria-label="Admission number"
+                            />
+                        </div>
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>Admission Date</label>
+                            <input type="date" style={styles.input}
+                                name="admission_date" value={form.admission_date}
+                                onChange={handleInputChange}
+                                aria-label="Admission date"
+                            />
+                        </div>
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>Previous School</label>
+                            <input type="text" style={styles.input} placeholder="School name"
+                                name="previous_school" value={form.previous_school}
+                                onChange={handleInputChange}
+                                aria-label="Previous school"
+                            />
+                        </div>
+                    </div>
+                </div>
                                 />
                             </div>
                             <div className="input-group">
