@@ -15,6 +15,7 @@ import EditStudent from './pages/EditStudent';
 import EditTeacher from './pages/EditTeacher';
 import UserProfile from './pages/UserProfile';
 import Settings from './pages/Settings';
+import Landingpage from './pages/Landingpage';
 import './styles.css';
 
 // 1. Basic Protection: Sirf Login check karta hai
