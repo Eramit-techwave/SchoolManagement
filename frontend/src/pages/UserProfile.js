@@ -1,43 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { getProfile, updateProfile } from '../api';
+import React, { useState } from 'react';
 import { useAuth } from '../AuthContext';
 
 function UserProfile() {
     const { authData } = useAuth();
-    const [profile, setProfile] = useState({ username: '', email: '', first_name: '', last_name: '' });
     const [isEditing, setIsEditing] = useState(false);
     const [message, setMessage] = useState('');
     const [isError, setIsError] = useState(false);
-
-    useEffect(() => { loadProfile(); }, []);
-
-    const loadProfile = async () => {
-        try {
-            const response = await getProfile();
-            setProfile(response.data);
-        } catch (error) {
-            setMessage('Failed to load profile');
-            setIsError(true);
-        }
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setProfile({...profile, [name]: value});
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await updateProfile(profile);
-            setMessage('Profile updated successfully!');
-            setIsError(false);
-            setIsEditing(false);
-        } catch (error) {
-            setMessage('Failed to update profile');
-            setIsError(true);
-        }
-    };
 
     const styles = {
         container: { padding: '30px 45px', maxWidth: '800px', margin: '0 auto' },
