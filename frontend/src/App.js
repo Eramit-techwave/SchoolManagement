@@ -80,6 +80,10 @@ function App() {
         <BrowserRouter>
             {token && <Navbar />}
             <Routes>
+                {/* Landing Page - Everyone can see */}
+                <Route path="/landing" element={<Landingpage />} />
+                
+                {/* Login Page */}
                 <Route path="/login" element={<Login />} />
                 
                 {/* Dashboard sab dekh sakte hain */}
@@ -140,8 +144,8 @@ function App() {
                     <ProtectedRoute><Settings /></ProtectedRoute>
                 } />
 
-                {/* Default redirect */}
-                <Route path="*" element={<Navigate to="/" />} />
+                {/* Default redirect - agar logged in ho toh dashboard, nahi toh landing page */}
+                <Route path="*" element={token ? <Navigate to="/" /> : <Navigate to="/landing" />} />
             </Routes>
         </BrowserRouter>
     );
