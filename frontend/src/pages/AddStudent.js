@@ -433,144 +433,137 @@ function AddStudent() {
                         </div>
                     </div>
                 </div>
-                                />
-                            </div>
-                            <div className="input-group">
-                                <label>Previous School</label>
-                                <input type="text" className="tech-input" placeholder="School name"
-                                    name="previous_school" value={form.previous_school}
-                                    onChange={handleInputChange}
-                                    aria-label="Previous school"
-                                />
-                            </div>
+
+                {/* CONTACT INFORMATION */}
+                <div style={styles.panel}>
+                    <div style={styles.panelTitle}>
+                        <span style={styles.panelTitleDot}></span> Contact Information
+                    </div>
+                    <div style={styles.formGrid}>
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>Email</label>
+                            <input type="email" style={styles.input} placeholder="Email address"
+                                name="email" value={form.email}
+                                onChange={handleInputChange}
+                                aria-label="Email"
+                            />
+                        </div>
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>Phone</label>
+                            <input type="tel" style={styles.input} placeholder="10 digit phone"
+                                name="phone" value={form.phone}
+                                onChange={handleInputChange}
+                                aria-label="Phone"
+                            />
+                        </div>
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>Address</label>
+                            <input type="text" style={styles.input} placeholder="Full address"
+                                name="address" value={form.address}
+                                onChange={handleInputChange}
+                                aria-label="Address"
+                            />
                         </div>
                     </div>
+                </div>
 
-                    {/* CONTACT INFORMATION */}
-                    <div className="form-panel">
-                        <div className="panel-title"><span></span> Contact Information</div>
-                        <div className="form-grid">
-                            <div className="input-group">
-                                <label>Phone Number</label>
-                                <input type="tel" className="tech-input" placeholder="10 digit number"
-                                    name="phone" value={form.phone}
-                                    onChange={handleInputChange}
-                                    aria-label="Phone number"
-                                />
-                            </div>
-                            <div className="input-group">
-                                <label>Email Address</label>
-                                <input type="email" className="tech-input" placeholder="example@email.com"
-                                    name="email" value={form.email}
-                                    onChange={handleInputChange}
-                                    aria-label="Email address"
-                                />
-                            </div>
-                            <div className="input-group" style={{gridColumn: 'span 1'}}>
-                                <label>Address</label>
-                                <input type="text" className="tech-input" placeholder="Full address"
-                                    name="address" value={form.address}
-                                    onChange={handleInputChange}
-                                    aria-label="Address"
-                                />
-                            </div>
+                {/* PARENT INFORMATION */}
+                <div style={styles.panel}>
+                    <div style={styles.panelTitle}>
+                        <span style={styles.panelTitleDot}></span> Parent Information
+                    </div>
+                    <div style={styles.formGrid}>
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>Father's Name</label>
+                            <input type="text" style={styles.input} placeholder="Father name"
+                                name="father_name" value={form.father_name}
+                                onChange={handleInputChange}
+                                aria-label="Father name"
+                            />
+                        </div>
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>Father's Phone</label>
+                            <input type="tel" style={styles.input} placeholder="Phone number"
+                                name="father_phone" value={form.father_phone}
+                                onChange={handleInputChange}
+                                aria-label="Father phone"
+                            />
+                        </div>
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>Mother's Name</label>
+                            <input type="text" style={styles.input} placeholder="Mother name"
+                                name="mother_name" value={form.mother_name}
+                                onChange={handleInputChange}
+                                aria-label="Mother name"
+                            />
+                        </div>
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>Mother's Phone</label>
+                            <input type="tel" style={styles.input} placeholder="Phone number"
+                                name="mother_phone" value={form.mother_phone}
+                                onChange={handleInputChange}
+                                aria-label="Mother phone"
+                            />
+                        </div>
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>Parent Email</label>
+                            <input type="email" style={styles.input} placeholder="Parent email"
+                                name="parent_email" value={form.parent_email}
+                                onChange={handleInputChange}
+                                aria-label="Parent email"
+                            />
                         </div>
                     </div>
+                </div>
 
-                    {/* GUARDIAN INFORMATION */}
-                    <div className="form-panel">
-                        <div className="panel-title"><span></span> Guardian Information</div>
-                        <div className="form-grid">
-                            <div className="input-group">
-                                <label>Father's Name</label>
-                                <input type="text" className="tech-input" placeholder="Father name"
-                                    name="father_name" value={form.father_name}
-                                    onChange={handleInputChange}
-                                    aria-label="Father name"
-                                />
-                            </div>
-                            <div className="input-group">
-                                <label>Father's Phone</label>
-                                <input type="tel" className="tech-input" placeholder="Phone number"
-                                    name="father_phone" value={form.father_phone}
-                                    onChange={handleInputChange}
-                                    aria-label="Father phone"
-                                />
-                            </div>
-                            <div className="input-group">
-                                <label>Mother's Name</label>
-                                <input type="text" className="tech-input" placeholder="Mother name"
-                                    name="mother_name" value={form.mother_name}
-                                    onChange={handleInputChange}
-                                    aria-label="Mother name"
-                                />
-                            </div>
-                            <div className="input-group">
-                                <label>Mother's Phone</label>
-                                <input type="tel" className="tech-input" placeholder="Phone number"
-                                    name="mother_phone" value={form.mother_phone}
-                                    onChange={handleInputChange}
-                                    aria-label="Mother phone"
-                                />
-                            </div>
-                            <div className="input-group">
-                                <label>Parent Email</label>
-                                <input type="email" className="tech-input" placeholder="Parent email"
-                                    name="parent_email" value={form.parent_email}
-                                    onChange={handleInputChange}
-                                    aria-label="Parent email"
-                                />
-                            </div>
+                {/* ADDITIONAL INFORMATION */}
+                <div style={styles.panel}>
+                    <div style={styles.panelTitle}>
+                        <span style={styles.panelTitleDot}></span> Additional Information
+                    </div>
+                    <div style={styles.formGrid}>
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>Bus Route</label>
+                            <input type="text" style={styles.input} placeholder="Route name"
+                                name="bus_route" value={form.bus_route}
+                                onChange={handleInputChange}
+                                aria-label="Bus route"
+                            />
                         </div>
-                    </div>
-
-                    {/* ADDITIONAL INFORMATION */}
-                    <div className="form-panel">
-                        <div className="panel-title"><span></span> Additional Information</div>
-                        <div className="form-grid">
-                            <div className="input-group">
-                                <label>Bus Route</label>
-                                <input type="text" className="tech-input" placeholder="Route name"
-                                    name="bus_route" value={form.bus_route}
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>Hostel</label>
+                            <label style={{display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 500}}>
+                                <input type="checkbox" name="hostel" checked={form.hostel}
+                                    onChange={handleInputChange} style={{width: '18px', height: '18px', cursor: 'pointer'}}
+                                    aria-label="Hostel"
+                                />
+                                <span>Student uses hostel</span>
+                            </label>
+                        </div>
+                        {form.hostel && (
+                            <div style={styles.inputGroup}>
+                                <label style={styles.label}>Hostel Room</label>
+                                <input type="text" style={styles.input} placeholder="Room number"
+                                    name="hostel_room" value={form.hostel_room}
                                     onChange={handleInputChange}
-                                    aria-label="Bus route"
+                                    aria-label="Hostel room"
                                 />
                             </div>
-                            <div className="input-group">
-                                <label>Hostel</label>
-                                <label style={{display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 500}}>
-                                    <input type="checkbox" name="hostel" checked={form.hostel}
-                                        onChange={handleInputChange} style={{width: '18px', height: '18px', cursor: 'pointer'}}
-                                        aria-label="Hostel"
-                                    />
-                                    <span>Student uses hostel</span>
-                                </label>
-                            </div>
-                            {form.hostel && (
-                                <div className="input-group">
-                                    <label>Hostel Room</label>
-                                    <input type="text" className="tech-input" placeholder="Room number"
-                                        name="hostel_room" value={form.hostel_room}
-                                        onChange={handleInputChange}
-                                        aria-label="Hostel room"
-                                    />
-                                </div>
-                            )}
-                        </div>
+                        )}
                     </div>
+                </div>
 
-                    <div className="btn-row">
-                        <button
-                            type="submit" className="submit-btn"
-                            disabled={isSubmitting}
-                        >
-                            {isSubmitting ? '⏳ Processing...' : '➕ Create Student'}
-                        </button>
-                        <a href="/students" className="back-btn">Cancel</a>
-                    </div>
+                <div style={styles.btnRow}>
+                    <button
+                        type="submit" style={styles.submitBtn}
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? '⏳ Processing...' : '➕ Create Student'}
+                    </button>
+                    <a href="/students" style={styles.backBtn}>Cancel</a>
+                </div>
 
-                </form>
-            </main>
+            </form>
         </div>
     );
 }
