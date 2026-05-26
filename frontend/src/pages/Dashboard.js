@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { getStudents, getTeachers, getAttendance } from '../api';
-import { useAuth } from '../AuthContext'; // 1. AuthContext import karo
+import { useAuth } from '../AuthContext';
+import { Link } from 'react-router-dom';
 
 function Dashboard() {
-    const { user } = useAuth(); // 2. User ka data nikaalo (isme role hai)
+    const { user, logout } = useAuth();
     const role = user?.role;
 
     const [totalStudents, setTotalStudents] = useState(0);
@@ -11,8 +12,27 @@ function Dashboard() {
     const [totalAttendance, setTotalAttendance] = useState(0);
     const [recentStudents, setRecentStudents] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [currentTime, setCurrentTime] = useState(new Date());
+    const [notifications, setNotifications] = useState([]);
 
-    useEffect(() => { loadData(); }, []);
+    // Real-time clock system
+    useEffect(() => {
+        const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+        return () => clearInterval(timer);
+    }, []);
+
+    useEffect(() => { 
+        loadData();
+        loadNotifications();
+    }, []);
+
+    const loadNotifications = () => {
+        const defaultNotifs = [
+            { id: 1, title: 'System Status', msg: 'All systems operational', type: 'success', time: 'Now' },
+            { id: 2, title: 'Welcome Back', msg: `Welcome ${user?.username}, System Ready`, type: 'info', time: '2m ago' }
+        ];
+        setNotifications(defaultNotifs);
+    };
 
     const loadData = async () => {
         try {
@@ -26,157 +46,473 @@ function Dashboard() {
     };
 
     return (
-        <div className="tech-shell">
+        <div style={{ display: 'flex', height: '100vh', background: '#f5f7fa', fontFamily: "'Plus Jakarta Sans', sans-serif", overflow: 'hidden' }}>
             <style>{`
-                /* ... (Saari CSS wahi rahegi jo pehle thi) ... */
                 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;800&family=JetBrains+Mono:wght@500&display=swap');
-                .tech-shell { display: flex; height: 100vh; background: #FFFFFF; color: #1e293b; font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; }
-                .sidebar { width: 75px; background: #0f172a; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; align-items: center; padding: 30px 0; gap: 20px; }
-                .nav-link { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 14px; color: #94a3b8; text-decoration: none; font-size: 20px; transition: all 0.3s; }
-                .nav-link:hover, .nav-link.active { color: #00d2ff; background: rgba(0, 210, 255, 0.1); transform: translateX(3px); }
-                .main-content { flex: 1; padding: 30px 40px; overflow-y: auto; background: #fdfdfd; }
-                .top-bar { display: flex; gap: 12px; margin-bottom: 30px; padding: 15px; background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
-                .action-btn { padding: 10px 20px; background: #f8fafc; color: #475569; border-radius: 10px; text-decoration: none; font-size: 13px; font-weight: 700; border: 1px solid #e2e8f0; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
-                .action-btn:hover { background: #0f172a; color: #00d2ff; border-color: #0f172a; transform: translateY(-2px); }
-                .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
-                .stat-card { background: #ffffff; padding: 25px; border-radius: 18px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; transition: 0.3s; }
-                .stat-card:hover { border-color: #00d2ff; transform: translateY(-3px); }
-                .stat-card .val { font-family: 'JetBrains Mono', monospace; font-size: 36px; font-weight: 800; color: #0f172a; margin: 5px 0; }
-                .stat-card .lab { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
-                .bento-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; height: auto; }
-                .panel { background: #ffffff; border-radius: 24px; border: 1px solid #e2e8f0; padding: 25px; display: flex; flex-direction: column; min-height: 400px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
-                .panel-title { font-size: 14px; font-weight: 800; color: #0f172a; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; }
-                .panel-title span { width: 10px; height: 10px; background: #00d2ff; border-radius: 3px; }
-                .custom-table { width: 100%; border-collapse: collapse; }
-                .custom-table th { text-align: left; padding: 12px; font-size: 11px; color: #94a3b8; text-transform: uppercase; }
-                .row-item { transition: 0.2s; border-bottom: 1px solid #f1f5f9; }
-                .row-item:hover { background: #f0f9ff; }
-                .row-item td { padding: 15px 12px; font-size: 14px; color: #475569; }
-                .name-txt { font-weight: 700; color: #1e293b; }
-                .notif-item { background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 12px; border-left: 4px solid #00d2ff; font-size: 13px; color: #475569; }
-                .notif-item strong { display: block; color: #0f172a; margin-bottom: 3px; font-size: 14px; }
-                .placeholder-area { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #fafafa; border: 2px dashed #e2e8f0; border-radius: 20px; color: #94a3b8; }
+                
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                
+                /* SIDEBAR */
+                .dashboard-sidebar {
+                    width: 80px;
+                    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+                    border-right: 1px solid rgba(0,210,255,0.1);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 20px 0;
+                    gap: 15px;
+                    position: fixed;
+                    height: 100vh;
+                    left: 0;
+                    top: 0;
+                    overflow-y: auto;
+                    z-index: 1000;
+                }
+                
+                .sidebar-icon {
+                    width: 50px;
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 12px;
+                    color: #94a3b8;
+                    text-decoration: none;
+                    font-size: 22px;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    cursor: pointer;
+                    border: 2px solid transparent;
+                }
+                
+                .sidebar-icon:hover {
+                    color: #00d2ff;
+                    background: rgba(0, 210, 255, 0.1);
+                    border-color: rgba(0, 210, 255, 0.2);
+                    transform: translateY(-2px);
+                }
+                
+                .sidebar-spacer { flex: 1; }
+                
+                /* MAIN CONTENT */
+                .dashboard-main {
+                    margin-left: 80px;
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    overflow-y: auto;
+                    background: #f5f7fa;
+                    padding: 20px;
+                }
+                
+                /* HEADER */
+                .dashboard-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    background: white;
+                    padding: 20px 30px;
+                    border-radius: 16px;
+                    border: 1px solid #e2e8f0;
+                    margin-bottom: 20px;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                    flex-wrap: wrap;
+                    gap: 15px;
+                }
+                
+                .header-title h1 {
+                    font-size: 26px;
+                    font-weight: 800;
+                    color: #0f172a;
+                    margin: 0;
+                }
+                
+                .header-title p {
+                    font-size: 13px;
+                    color: #64748b;
+                    margin: 5px 0 0 0;
+                }
+                
+                .header-clock {
+                    font-family: 'JetBrains Mono', monospace;
+                    font-size: 24px;
+                    font-weight: 800;
+                    color: #00d2ff;
+                    background: #0f172a;
+                    padding: 12px 20px;
+                    border-radius: 10px;
+                    letter-spacing: 1px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+                
+                /* ACTION BUTTONS */
+                .action-buttons {
+                    display: flex;
+                    gap: 10px;
+                    flex-wrap: wrap;
+                    margin-bottom: 20px;
+                }
+                
+                .action-btn {
+                    padding: 12px 24px;
+                    background: white;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 10px;
+                    color: #475569;
+                    text-decoration: none;
+                    font-weight: 600;
+                    font-size: 13px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                }
+                
+                .action-btn:hover {
+                    background: #0f172a;
+                    color: #00d2ff;
+                    border-color: #0f172a;
+                    transform: translateY(-2px);
+                }
+                
+                /* STATS GRID */
+                .stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    gap: 15px;
+                    margin-bottom: 20px;
+                }
+                
+                .stat-card {
+                    background: white;
+                    padding: 20px;
+                    border-radius: 14px;
+                    border: 1px solid #e2e8f0;
+                    transition: all 0.3s;
+                    cursor: pointer;
+                }
+                
+                .stat-card:hover {
+                    border-color: #00d2ff;
+                    transform: translateY(-3px);
+                    box-shadow: 0 8px 16px rgba(0,210,255,0.1);
+                }
+                
+                .stat-label {
+                    font-size: 11px;
+                    color: #64748b;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    font-weight: 700;
+                    margin-bottom: 8px;
+                }
+                
+                .stat-value {
+                    font-size: 32px;
+                    font-weight: 800;
+                    color: #0f172a;
+                    font-family: 'JetBrains Mono', monospace;
+                }
+                
+                /* GRID LAYOUT */
+                .content-grid {
+                    display: grid;
+                    grid-template-columns: 2fr 1fr;
+                    gap: 15px;
+                    flex: 1;
+                }
+                
+                .panel {
+                    background: white;
+                    border-radius: 14px;
+                    border: 1px solid #e2e8f0;
+                    padding: 20px;
+                    display: flex;
+                    flex-direction: column;
+                    overflow: hidden;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+                }
+                
+                .panel-header {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    margin-bottom: 15px;
+                    padding-bottom: 15px;
+                    border-bottom: 1px solid #f1f5f9;
+                }
+                
+                .panel-title {
+                    font-size: 13px;
+                    font-weight: 800;
+                    color: #0f172a;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+                
+                .panel-dot {
+                    width: 8px;
+                    height: 8px;
+                    background: #00d2ff;
+                    border-radius: 50%;
+                }
+                
+                .table-container {
+                    overflow-y: auto;
+                    flex: 1;
+                }
+                
+                .custom-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    font-size: 13px;
+                }
+                
+                .custom-table th {
+                    padding: 10px;
+                    text-align: left;
+                    font-size: 11px;
+                    color: #94a3b8;
+                    text-transform: uppercase;
+                    font-weight: 700;
+                    border-bottom: 1px solid #f1f5f9;
+                    background: #fafafa;
+                    position: sticky;
+                    top: 0;
+                }
+                
+                .custom-table td {
+                    padding: 12px 10px;
+                    border-bottom: 1px solid #f1f5f9;
+                    color: #475569;
+                }
+                
+                .custom-table tr:hover {
+                    background: #f8fafc;
+                }
+                
+                .name-strong {
+                    font-weight: 700;
+                    color: #0f172a;
+                }
+                
+                /* NOTIFICATIONS */
+                .notif-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    flex: 1;
+                    overflow-y: auto;
+                }
+                
+                .notif-item {
+                    background: #f8fafc;
+                    padding: 12px;
+                    border-radius: 10px;
+                    border-left: 4px solid #00d2ff;
+                    font-size: 12px;
+                }
+                
+                .notif-item.success {
+                    border-left-color: #10b981;
+                }
+                
+                .notif-item.warning {
+                    border-left-color: #f59e0b;
+                }
+                
+                .notif-title {
+                    font-weight: 700;
+                    color: #0f172a;
+                    display: block;
+                    margin-bottom: 3px;
+                    font-size: 13px;
+                }
+                
+                .notif-text {
+                    color: #64748b;
+                    margin-bottom: 3px;
+                }
+                
+                .notif-time {
+                    font-size: 11px;
+                    color: #94a3b8;
+                }
+                
+                /* LOGOUT BUTTON */
+                .logout-btn {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 12px;
+                    border: 2px solid #ff5252;
+                    background: transparent;
+                    color: #ff5252;
+                    font-size: 20px;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                
+                .logout-btn:hover {
+                    background: #ff5252;
+                    color: white;
+                    transform: scale(1.05);
+                }
+                
+                /* MOBILE RESPONSIVE */
+                @media (max-width: 1200px) {
+                    .content-grid { grid-template-columns: 1fr; }
+                    .stats-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+                }
+                
+                @media (max-width: 768px) {
+                    .dashboard-sidebar { width: 70px; gap: 10px; }
+                    .sidebar-icon { width: 45px; height: 45px; font-size: 18px; }
+                    .dashboard-main { margin-left: 70px; padding: 15px; }
+                    .dashboard-header { flex-direction: column; align-items: flex-start; }
+                    .header-clock { justify-content: flex-start; }
+                    .action-buttons { flex-direction: column; }
+                    .action-btn { width: 100%; justify-content: center; }
+                    .stats-grid { grid-template-columns: 1fr; }
+                    .header-title h1 { font-size: 20px; }
+                }
+                
+                @media (max-width: 480px) {
+                    .dashboard-sidebar { width: 60px; }
+                    .sidebar-icon { width: 40px; height: 40px; font-size: 16px; }
+                    .dashboard-main { margin-left: 60px; padding: 10px; }
+                    .header-title h1 { font-size: 18px; }
+                    .header-clock { font-size: 16px; padding: 8px 12px; }
+                    .content-grid { grid-template-columns: 1fr; gap: 10px; }
+                    .panel { padding: 15px; }
+                }
             `}</style>
 
-            {/* 🛰️ FIXED SIDEBAR (ROLE-BASED) */}
-            <aside className="sidebar">
-                <a href="/" className="nav-link active" title="Dashboard">🏠</a>
-
-                {/* Sirf Admin aur Teacher ko dikhao Students link */}
+            {/* SIDEBAR */}
+            <div className="dashboard-sidebar">
+                <Link to="/" className="sidebar-icon" title="Dashboard">🏠</Link>
+                
                 {(role === 'admin' || role === 'teacher') && (
-                    <a href="/students" className="nav-link" title="Students">👨‍🎓</a>
+                    <Link to="/students" className="sidebar-icon" title="Students">👨‍🎓</Link>
                 )}
-
-                {/* Sirf Admin ko dikhao Eye Scanner aur Teachers link */}
+                
                 {role === 'admin' && (
                     <>
-                        <a href="/eye-scanner" className="nav-link" title="Biometric">👁️</a>
-                        <a href="/teachers" className="nav-link" title="Staff">💼</a>
+                        <Link to="/eye-scanner" className="sidebar-icon" title="Eye Scanner">👁️</Link>
+                        <Link to="/teachers" className="sidebar-icon" title="Faculty">💼</Link>
+                        <Link to="/add-student" className="sidebar-icon" title="Add Student">➕</Link>
                     </>
                 )}
+                
+                <Link to="/attendance" className="sidebar-icon" title="Attendance">📋</Link>
+                <div className="sidebar-spacer"></div>
+                <Link to="/profile" className="sidebar-icon" title="Profile">👤</Link>
+                <button onClick={logout} className="logout-btn" title="Logout">🚪</button>
+            </div>
 
-                <a href="/attendance" className="nav-link" title="Attendance">📋</a>
-                <div style={{ marginTop: 'auto' }}><a href="/settings" className="nav-link">⚙️</a></div>
-            </aside>
-
-            {/* 🖥️ MAIN VIEW */}
-            <main className="main-content">
-                <header style={{ marginBottom: '25px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div>
-                        <h2 style={{ margin: 0, fontSize: '24px', fontWeight: '800' }}>Apna School Control Center</h2>
-                        <p style={{ margin: 0, color: '#64748b', fontSize: '13px' }}>Logged in as: <strong>{user?.username}</strong> ({role})</p>
+            {/* MAIN CONTENT */}
+            <div className="dashboard-main">
+                {/* HEADER */}
+                <div className="dashboard-header">
+                    <div className="header-title">
+                        <h1>Apna School Management</h1>
+                        <p>Welcome, <strong>{user?.username}</strong> • Role: <strong>{role?.toUpperCase()}</strong></p>
                     </div>
-                    <div style={{ background: '#0f172a', color: '#00d2ff', padding: '8px 16px', borderRadius: '10px', fontSize: '12px', fontWeight: '700' }}>
-                        SYSTEM_ONLINE • 2026
+                    <div className="header-clock">
+                        ⏰ {currentTime.toLocaleTimeString()}
                     </div>
-                </header>
+                </div>
 
-                {/* ⚡ ACTION ROW (ROLE-BASED) */}
-                <div className="top-bar">
-                    {/* Sirf Admin ko hi register karne ka option milega */}
+                {/* ACTION BUTTONS */}
+                <div className="action-buttons">
                     {role === 'admin' && (
                         <>
-                            <a href="/add-student" className="action-btn"><span>➕</span> Register Student</a>
-                            <a href="/eye-scanner" className="action-btn"><span>👁️</span> Eye Scanner</a>
+                            <Link to="/add-student" className="action-btn">➕ Register Student</Link>
+                            <Link to="/add-teacher" className="action-btn">👨‍🏫 Add Faculty</Link>
+                            <Link to="/eye-scanner" className="action-btn">👁️ Eye Scanner</Link>
                         </>
                     )}
-
-                    {/* Teacher aur Admin dono attendance mark kar sakte hain */}
                     {(role === 'admin' || role === 'teacher') && (
-                        <a href="/attendance" className="action-btn"><span>📝</span> Mark Attendance</a>
+                        <Link to="/attendance" className="action-btn">📝 Mark Attendance</Link>
                     )}
-
-                    <a href="/students" className="action-btn"><span>📁</span> Access Database</a>
+                    <Link to="/students" className="action-btn">📋 View Students</Link>
                 </div>
 
-                {/* 📊 STATS (Sabke liye alag view ho sakta hai, par abhi sabko dikhao) */}
+                {/* STATS */}
                 <div className="stats-grid">
                     <div className="stat-card">
-                        <span className="lab">Total Enrollment</span>
-                        <span className="val">{loading ? '..' : totalStudents}</span>
+                        <div className="stat-label">Total Students</div>
+                        <div className="stat-value">{loading ? '...' : totalStudents}</div>
                     </div>
                     <div className="stat-card">
-                        <span className="lab">Academic Faculty</span>
-                        <span className="val">{loading ? '..' : totalTeachers}</span>
+                        <div className="stat-label">Faculty Members</div>
+                        <div className="stat-value">{loading ? '...' : totalTeachers}</div>
                     </div>
                     <div className="stat-card">
-                        <span className="lab">Logs Verified</span>
-                        <span className="val" style={{ color: '#10b981' }}>{loading ? '..' : totalAttendance}</span>
+                        <div className="stat-label">Attendance Records</div>
+                        <div className="stat-value" style={{color: '#10b981'}}>{loading ? '...' : totalAttendance}</div>
                     </div>
                 </div>
 
-                {/* 🧩 3-PART GRID */}
-                <div className="bento-grid">
+                {/* CONTENT GRID */}
+                <div className="content-grid">
+                    {/* RECENT STUDENTS PANEL */}
                     <div className="panel">
-                        <div className="panel-title"><span></span> RECENT_ADMISSIONS</div>
-                        <div style={{ overflowY: 'auto' }}>
+                        <div className="panel-header">
+                            <div className="panel-dot"></div>
+                            <div className="panel-title">Recent Registrations</div>
+                        </div>
+                        <div className="table-container">
                             <table className="custom-table">
                                 <thead>
                                     <tr>
-                                        <th>IDENTITY</th>
-                                        <th>ROLL_ID</th>
-                                        <th>CLASS</th>
+                                        <th>Name</th>
+                                        <th>Roll No</th>
+                                        <th>Class</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {loading ? (
-                                        <tr><td colSpan="3" style={{ textAlign: 'center', padding: '20px' }}>Syncing...</td></tr>
-                                    ) : (
+                                        <tr><td colSpan="3" style={{textAlign: 'center', padding: '20px'}}>Loading...</td></tr>
+                                    ) : recentStudents.length > 0 ? (
                                         recentStudents.map(s => (
-                                            <tr key={s.id} className="row-item">
-                                                <td><span className="name-txt">{s.name}</span></td>
-                                                <td style={{ fontFamily: 'JetBrains Mono', fontSize: '12px' }}>{s.roll_number}</td>
-                                                <td><span style={{ fontSize: '12px', fontWeight: '700', color: '#0088cc' }}>{s.class_name}</span></td>
+                                            <tr key={s.id}>
+                                                <td><span className="name-strong">{s.name}</span></td>
+                                                <td>{s.roll_number}</td>
+                                                <td>{s.class_name || 'N/A'}</td>
                                             </tr>
                                         ))
+                                    ) : (
+                                        <tr><td colSpan="3" style={{textAlign: 'center', padding: '20px', color: '#94a3b8'}}>No students yet</td></tr>
                                     )}
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
+                    {/* NOTIFICATIONS PANEL */}
                     <div className="panel">
-                        <div className="panel-title"><span></span> LIVE_ALERTS</div>
-                        <div className="notif-item">
-                            <strong>Database Synched</strong>
-                            System successfully connected to the main server.
+                        <div className="panel-header">
+                            <div className="panel-dot"></div>
+                            <div className="panel-title">Notifications</div>
                         </div>
-                        <div className="notif-item" style={{ borderLeftColor: '#10b981' }}>
-                            <strong>Biometric Ready</strong>
-                            Eye scanner is calibrated and waiting for input.
-                        </div>
-                    </div>
-
-                    <div className="panel">
-                        <div className="panel-title"><span></span> FUTURE_MODULES</div>
-                        <div className="placeholder-area">
-                            <div style={{ fontSize: '30px', marginBottom: '10px' }}>⚙️</div>
-                            <span>RESERVED FOR ANALYTICS</span>
-                            <small style={{ fontSize: '10px', marginTop: '5px' }}>Module under development</small>
+                        <div className="notif-list">
+                            {notifications.map(n => (
+                                <div key={n.id} className={`notif-item ${n.type}`}>
+                                    <span className="notif-title">{n.title}</span>
+                                    <span className="notif-text">{n.msg}</span>
+                                    <span className="notif-time">{n.time}</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
-            </main>
+            </div>
         </div>
     );
 }

@@ -120,7 +120,7 @@ export default function Landingpage() {
 
             {/* FOOTER */}
             <footer className="footer">
-                <p>© 2026 Apna School Platform. Built with Django & React for modern education.</p>
+                <p>© 2026 Apna School Platform. Built for  modern education.</p>
             </footer>
         </div>
     );

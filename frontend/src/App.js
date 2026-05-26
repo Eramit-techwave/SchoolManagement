@@ -21,7 +21,7 @@ import './styles.css';
 // 1. Basic Protection: Sirf Login check karta hai
 function ProtectedRoute({ children }) {
     const { token } = useAuth();
-    if (!token) return <Navigate to="/login" />;
+    if (!token) return <Navigate to="/landing" />;
     return children;
 }
 
@@ -29,7 +29,7 @@ function ProtectedRoute({ children }) {
 function RoleRoute({ children, allowedRoles }) {
     const { user, token } = useAuth();
     
-    if (!token) return <Navigate to="/login" />;
+    if (!token) return <Navigate to="/landing" />;
     
     // Agar user ka role allowed list mein nahi hai, toh Dashboard bhej do
     if (!allowedRoles.includes(user?.role)) {
