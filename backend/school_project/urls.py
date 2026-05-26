@@ -39,6 +39,7 @@ urlpatterns = [
     path('api/', include('attendance.urls')),
     path('api/eye/', include('eye_auth.urls')),
     path('api/auth/', include('users.urls')),
+    path('api/users/', include('users.urls')),  # ✅ Add users under /api/users/ for analytics
     path('api/auth/register/', register_user),
 ]
 

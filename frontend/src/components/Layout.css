@@ -1,0 +1,105 @@
+/* UNIFIED LAYOUT STYLESHEET */
+
+.app-sidebar {
+    width: 80px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-right: 1px solid rgba(0,210,255,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    gap: 15px;
+    position: fixed;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.sidebar-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 22px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.sidebar-icon:hover {
+    color: #00d2ff;
+    background: rgba(0, 210, 255, 0.1);
+    border-color: rgba(0, 210, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.sidebar-spacer {
+    flex: 1;
+}
+
+.logout-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    border: 2px solid #ff5252;
+    background: transparent;
+    color: #ff5252;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logout-btn:hover {
+    background: #ff5252;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* MAIN CONTENT AREA */
+.main-content {
+    margin-left: 80px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    background: #f5f7fa;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .app-sidebar {
+        width: 70px;
+        gap: 10px;
+    }
+    .sidebar-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+    .main-content {
+        margin-left: 70px;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-sidebar {
+        width: 60px;
+    }
+    .sidebar-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+    .main-content {
+        margin-left: 60px;
+    }
+}

@@ -1,6 +1,7 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
+import Layout from './components/Layout';
 import Students from './pages/Students';
 import Teachers from './pages/Teachers';
 import Attendance from './pages/Attendance';
@@ -41,45 +42,10 @@ function RoleRoute({ children, allowedRoles }) {
     return children;
 }
 
-function Navbar() {
-    const { user, logout } = useAuth();
-    const role = user?.role;
-
-    return (
-        <nav className="navbar">
-            <Link to="/" className="navbar-brand">🏫 SchoolMS</Link>
-            <Link to="/">Dashboard</Link>
-            
-            {/* Navbar mein bhi role-based links */}
-            {(role === 'admin' || role === 'teacher') && <Link to="/students">Students</Link>}
-            
-            {role === 'admin' && (
-                <>
-                    <Link to="/add-student">Add Student</Link>
-                    <Link to="/teachers">Staff</Link>
-                    <Link to="/add-teacher">Add Staff</Link>
-                </>
-            )}
-            
-            <Link to="/attendance">Attendance</Link>
-            
-            {role === 'admin' && <Link to="/eye-scanner">👁️ Scanner</Link>}
-
-            <button onClick={logout} style={{
-                background: '#e53935', color: 'white', border: 'none',
-                padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', marginLeft: 'auto'
-            }}>
-                🚪 Logout ({user?.username} - {role})
-            </button>
-        </nav>
-    );
-}
-
 function App() {
     const { token } = useAuth();
     return (
         <BrowserRouter>
-            {token && <Navbar />}
             <Routes>
                 {/* Landing Page - Everyone can see */}
                 <Route path="/landing" element={<Landingpage />} />
@@ -87,67 +53,69 @@ function App() {
                 {/* Login Page */}
                 <Route path="/login" element={<Login />} />
                 
+                {/* All Protected Routes: Wrapped in Layout for consistent sidebar */}
+                
                 {/* Dashboard sab dekh sakte hain */}
-                <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                <Route path="/" element={<ProtectedRoute><Layout><Dashboard /></Layout></ProtectedRoute>} />
                 
                 {/* Students: Admin aur Teacher dekh sakte hain */}
                 <Route path="/students" element={
-                    <RoleRoute allowedRoles={['admin', 'teacher']}><Students /></RoleRoute>
+                    <RoleRoute allowedRoles={['admin', 'teacher']}><Layout><Students /></Layout></RoleRoute>
                 } />
                 
                 <Route path="/students/:id" element={
-                    <RoleRoute allowedRoles={['admin', 'teacher']}><StudentDetail /></RoleRoute>
+                    <RoleRoute allowedRoles={['admin', 'teacher']}><Layout><StudentDetail /></Layout></RoleRoute>
                 } />
 
                 {/* Add/Edit Student: Sirf Admin */}
                 <Route path="/add-student" element={
-                    <RoleRoute allowedRoles={['admin']}><AddStudent /></RoleRoute>
+                    <RoleRoute allowedRoles={['admin']}><Layout><AddStudent /></Layout></RoleRoute>
                 } />
                 
                 <Route path="/edit-student/:id" element={
-                    <RoleRoute allowedRoles={['admin']}><EditStudent /></RoleRoute>
+                    <RoleRoute allowedRoles={['admin']}><Layout><EditStudent /></Layout></RoleRoute>
                 } />
 
                 {/* Teachers/Staff: Sirf Admin */}
                 <Route path="/teachers" element={
-                    <RoleRoute allowedRoles={['admin']}><Teachers /></RoleRoute>
+                    <RoleRoute allowedRoles={['admin']}><Layout><Teachers /></Layout></RoleRoute>
                 } />
                 
                 <Route path="/teachers/:id" element={
-                    <RoleRoute allowedRoles={['admin']}><TeacherDetail /></RoleRoute>
+                    <RoleRoute allowedRoles={['admin']}><Layout><TeacherDetail /></Layout></RoleRoute>
                 } />
                 
                 <Route path="/add-teacher" element={
-                    <RoleRoute allowedRoles={['admin']}><AddTeacher /></RoleRoute>
+                    <RoleRoute allowedRoles={['admin']}><Layout><AddTeacher /></Layout></RoleRoute>
                 } />
                 
                 <Route path="/edit-teacher/:id" element={
-                    <RoleRoute allowedRoles={['admin']}><EditTeacher /></RoleRoute>
+                    <RoleRoute allowedRoles={['admin']}><Layout><EditTeacher /></Layout></RoleRoute>
                 } />
 
                 {/* Attendance: Admin aur Teacher */}
                 <Route path="/attendance" element={
-                    <RoleRoute allowedRoles={['admin', 'teacher']}><Attendance /></RoleRoute>
+                    <RoleRoute allowedRoles={['admin', 'teacher']}><Layout><Attendance /></Layout></RoleRoute>
                 } />
 
                 {/* Eye Scanner: Sirf Admin */}
                 <Route path="/eye-scanner" element={
-                    <RoleRoute allowedRoles={['admin']}><EyeScanner /></RoleRoute>
+                    <RoleRoute allowedRoles={['admin']}><Layout><EyeScanner /></Layout></RoleRoute>
                 } />
 
                 {/* User Profile: Sab log dekh sakte hain apna profile */}
                 <Route path="/profile" element={
-                    <ProtectedRoute><UserProfile /></ProtectedRoute>
+                    <ProtectedRoute><Layout><UserProfile /></Layout></ProtectedRoute>
                 } />
 
                 {/* Settings: Sab log access kar sakte hain */}
                 <Route path="/settings" element={
-                    <ProtectedRoute><Settings /></ProtectedRoute>
+                    <ProtectedRoute><Layout><Settings /></Layout></ProtectedRoute>
                 } />
 
                 {/* Admin Analytics: Sirf Admin */}
                 <Route path="/admin-analytics" element={
-                    <RoleRoute allowedRoles={['admin']}><AdminAnalytics /></RoleRoute>
+                    <RoleRoute allowedRoles={['admin']}><Layout><AdminAnalytics /></Layout></RoleRoute>
                 } />
 
                 {/* Default redirect - agar logged in ho toh dashboard, nahi toh landing page */}
