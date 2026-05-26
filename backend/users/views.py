@@ -22,10 +22,19 @@ class MyTokenObtainPairView(TokenObtainPairView):
             user = User.objects.get(username=username)
             
             # Yahan hum response mein 'role' aur 'username' extra bhej rahe hain
-            response.data['role'] = user.profile.role
+            if hasattr(user, 'profile'):
+                response.data['role'] = user.profile.role
+            else:
+                # If profile doesn't exist, create it and default to student
+                from .models import UserProfile
+                profile = UserProfile.objects.create(user=user, role='student')
+                response.data['role'] = profile.role
+            
             response.data['username'] = user.username
-        except:
+        except Exception as e:
+            # Fallback to student role if anything goes wrong
             response.data['role'] = 'student'
+            response.data['username'] = request.data.get('username', 'unknown')
             
         return response
 

@@ -20,13 +20,25 @@ function Login() {
     const [regMessage, setRegMessage] = useState('');
     const [regError, setRegError] = useState('');
     const [googleError, setGoogleError] = useState('');
+    const [loginError, setLoginError] = useState('');
     const { login, loading, error, forgotPassword } = useAuth();
 
     // --- KEEP YOUR ORIGINAL HANDLERS EXACTLY AS THEY WERE ---
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoginError('');
+        
+        if (!username || !password) {
+            setLoginError('Username and password are required!');
+            return;
+        }
+        
         const success = await login(username, password);
-        if (success) window.location.href = '/';
+        if (success) {
+            window.location.href = '/';
+        } else {
+            setLoginError('Invalid username or password!');
+        }
     };
 
     const handleRegister = async (e) => {
@@ -344,7 +356,7 @@ function Login() {
                         <h2>{showForgot ? 'Reset Password' : 'Login'}</h2>
 
                         {/* KEEP YOUR MESSAGES */}
-                        {(error || googleError) && <div className="status-message error">❌ {error || googleError}</div>}
+                        {(error || googleError || loginError) && <div className="status-message error">❌ {error || googleError || loginError}</div>}
                         {forgotMessage && <div className="status-message success">✅ {forgotMessage}</div>}
 
                         {showForgot ? (
@@ -398,13 +410,13 @@ function Login() {
                         <div className="overlay-panel overlay-left">
                             <h1>Welcome to apna School!</h1>
                             <p>Lets Makes Someone's Future <br />start journey with us</p>
-                            <button className="ghost-button" onClick={() => { setIsLogin(true); setShowForgot(false); }}>SIGN IN</button>
+                            <button className="ghost-button" onClick={() => { setIsLogin(true); setShowForgot(false); setLoginError(''); setRegError(''); setRegMessage(''); }}>SIGN IN</button>
                         </div>
                         {/* Right side (visible when Logging in) */}
                         <div className="overlay-panel overlay-right">
                             <h1>Welcome To Apna School Managament !</h1>
                             <p>Let's Manage Your School <br />Efficiently & Digitaly</p>
-                            <button className="ghost-button" onClick={() => setIsLogin(false)}>SIGN UP</button>
+                            <button className="ghost-button" onClick={() => { setIsLogin(false); setLoginError(''); setRegError(''); }}>SIGN UP</button>
                         </div>
                     </div>
                 </div>
