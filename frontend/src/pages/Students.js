@@ -26,7 +26,7 @@ function Students() {
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this student record? This action cannot be undone.')) {
+        if (window.confirm('Are you sure you want to delete this student? This action cannot be undone.')) {
             try {
                 await deleteStudent(id);
                 setDeleteMessage('✅ Student deleted successfully!');
@@ -41,7 +41,7 @@ function Students() {
 
     const filteredStudents = students.filter(s =>
         s.name?.toLowerCase().includes(search.toLowerCase()) ||
-        s.roll_number?.toLowerCase().includes(search.toLowerCase())
+        s.roll_number?.toString().includes(search)
     );
 
     const styles = {
@@ -57,7 +57,7 @@ function Students() {
         studentInfo: { display: 'flex', alignItems: 'center', gap: '12px' },
         studentPhoto: { width: '50px', height: '50px', borderRadius: '12px', background: '#f0f9ff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', border: '1px solid #bfdbfe', flexShrink: 0 },
         studentName: { fontWeight: '700', color: '#0f172a' },
-        studentClass: { color: '#64748b', fontSize: '12px' },
+        studentRoll: { color: '#64748b', fontSize: '12px' },
         badge: { display: 'inline-block', padding: '4px 12px', background: '#ecfdf5', color: '#059669', borderRadius: '8px', fontSize: '12px', fontWeight: '600' },
         actionBtns: { display: 'flex', gap: '8px' },
         viewBtn: { padding: '6px 12px', background: '#0f172a', color: '#00d2ff', border: 'none', borderRadius: '6px', fontWeight: '600', fontSize: '11px', cursor: 'pointer', textDecoration: 'none', textTransform: 'uppercase', transition: '0.3s', display: 'inline-block' },
@@ -98,9 +98,9 @@ function Students() {
                     <div style={styles.loading}>Loading students...</div>
                 ) : filteredStudents.length === 0 ? (
                     <div style={styles.emptyState}>
-                        <p style={{fontSize: '40px'}}>📚</p>
+                        <p style={{fontSize: '40px'}}>👨‍🎓</p>
                         <p>No students found</p>
-                        <p style={{fontSize: '12px'}}>Add a new student to get started</p>
+                        <p style={{fontSize: '12px'}}>Add new students to get started</p>
                     </div>
                 ) : (
                     filteredStudents.map(student => (
@@ -109,12 +109,12 @@ function Students() {
                                 <div style={styles.studentPhoto}>👤</div>
                                 <div>
                                     <div style={styles.studentName}>{student.name}</div>
-                                    <div style={styles.studentClass}>{student.class_name} {student.section ? `- ${student.section}` : ''}</div>
+                                    <div style={styles.studentRoll}>{student.class_name || '—'}</div>
                                 </div>
                             </div>
                             <div>
-                                <strong>{student.roll_number}</strong>
-                                <div style={{fontSize: '12px', color: '#94a3b8'}}>Roll #</div>
+                                {student.roll_number || '—'}
+                                <div style={{fontSize: '12px', color: '#94a3b8'}}>Roll No</div>
                             </div>
                             <div>
                                 {student.email || '—'}
