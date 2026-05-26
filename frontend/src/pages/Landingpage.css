@@ -180,19 +180,61 @@ body {
 /* CARD UX STRUCTURE */
 .portal-card {
     background-color: var(--bg-light);
-    border: 1px solid #e2e8f0;
+    border: 2px solid #e2e8f0;
     border-radius: 16px;
     padding: 2.5rem 2rem;
     display: flex;
     flex-direction: column;
     cursor: pointer;
     transition: var(--transition);
+    position: relative;
 }
 
 .portal-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     border-color: #cbd5e1;
+}
+
+.portal-card.selected {
+    border-color: #00d2ff;
+    background: linear-gradient(135deg, #f0f9ff 0%, #f5f7fa 100%);
+    box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.1), 0 10px 25px rgba(0, 210, 255, 0.15);
+    transform: scale(1.02);
+}
+
+.portal-card.selected::before {
+    content: '✓ SELECTED';
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #00d2ff;
+    color: #0f172a;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.access-features {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 1.5rem 0;
+    padding: 12px;
+    background: rgba(0, 210, 255, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(0, 210, 255, 0.2);
+}
+
+.access-features small {
+    font-size: 13px;
+    color: #0f172a;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .icon-wrapper {
@@ -300,6 +342,23 @@ body {
 .feature-item p {
     color: var(--text-light);
     font-size: 0.9rem;
+}
+
+/* ROLE SELECTION NOTE */
+.role-note {
+    text-align: center;
+    margin-top: 3rem;
+    padding: 20px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #fff7ed 100%);
+    border: 2px solid #fbbf24;
+    border-radius: 12px;
+    color: #92400e;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.role-note p {
+    margin: 0;
 }
 
 /* --- 4. CLEAN FOOTER --- */

@@ -406,6 +406,7 @@ function Dashboard() {
                         <Link to="/eye-scanner" className="sidebar-icon" title="Eye Scanner">👁️</Link>
                         <Link to="/teachers" className="sidebar-icon" title="Faculty">💼</Link>
                         <Link to="/add-student" className="sidebar-icon" title="Add Student">➕</Link>
+                        <Link to="/admin-analytics" className="sidebar-icon" title="Analytics">📊</Link>
                     </>
                 )}
                 
@@ -435,6 +436,7 @@ function Dashboard() {
                             <Link to="/add-student" className="action-btn">➕ Register Student</Link>
                             <Link to="/add-teacher" className="action-btn">👨‍🏫 Add Faculty</Link>
                             <Link to="/eye-scanner" className="action-btn">👁️ Eye Scanner</Link>
+                            <Link to="/admin-analytics" className="action-btn">📊 Analytics</Link>
                         </>
                     )}
                     {(role === 'admin' || role === 'teacher') && (

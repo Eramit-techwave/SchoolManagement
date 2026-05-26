@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import { auth, googleProvider } from '../firebase';
 import { signInWithPopup } from 'firebase/auth';
 import axios from 'axios';
 
 function Login() {
+    const location = useLocation();
+    const selectedRoleFromLanding = location.state?.selectedRole || null;
+    
     const [isLogin, setIsLogin] = useState(true);
     const [showForgot, setShowForgot] = useState(false);
+    const [selectedRole, setSelectedRole] = useState(selectedRoleFromLanding);
 
     // --- KEEP YOUR ORIGINAL STATES EXACTLY AS THEY WERE ---
     const [username, setUsername] = useState('');
@@ -16,29 +20,50 @@ function Login() {
     const [regEmail, setRegEmail] = useState('');
     const [regPassword, setRegPassword] = useState('');
     const [regPassword2, setRegPassword2] = useState('');
+    const [regRole, setRegRole] = useState('student');
     const [forgotEmail, setForgotEmail] = useState('');
     const [forgotMessage, setForgotMessage] = useState('');
     const [regMessage, setRegMessage] = useState('');
     const [regError, setRegError] = useState('');
     const [googleError, setGoogleError] = useState('');
     const [loginError, setLoginError] = useState('');
+    const [accountPending, setAccountPending] = useState(false);
     const { login, loading, error, forgotPassword } = useAuth();
 
     // --- KEEP YOUR ORIGINAL HANDLERS EXACTLY AS THEY WERE ---
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoginError('');
+        setAccountPending(false);
         
         if (!username || !password) {
             setLoginError('Username and password are required!');
             return;
         }
         
-        const success = await login(username, password);
-        if (success) {
-            window.location.href = '/';
-        } else {
-            setLoginError('Invalid username or password!');
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/api/token/', {
+                username,
+                password
+            });
+            
+            if (response.status === 403) {
+                setAccountPending(true);
+                setLoginError('Your account is pending admin approval. Please contact administrator.');
+                return;
+            }
+            
+            const success = await login(username, password);
+            if (success) {
+                window.location.href = '/';
+            }
+        } catch (err) {
+            if (err.response?.status === 403) {
+                setAccountPending(true);
+                setLoginError('Your account is pending admin approval. Please contact administrator.');
+            } else {
+                setLoginError('Invalid username or password!');
+            }
         }
     };
 
@@ -46,6 +71,7 @@ function Login() {
         e.preventDefault();
         setRegError('');
         setRegMessage('');
+        
         if (regPassword !== regPassword2) {
             setRegError('Passwords do not match!');
             return;

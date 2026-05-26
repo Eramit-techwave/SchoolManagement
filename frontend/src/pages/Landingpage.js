@@ -1,8 +1,16 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './Landingpage.css';
 
 export default function Landingpage() {
+    const navigate = useNavigate();
+    const [selectedRole, setSelectedRole] = useState(null);
+
+    const handleRoleSelect = (role) => {
+        setSelectedRole(role);
+        // Navigate to login page with role pre-selected
+        navigate('/login', { state: { selectedRole: role } });
+    };
 
     return (
         <div className="landing-page">
@@ -17,7 +25,7 @@ export default function Landingpage() {
                     <a href="#about">About</a>
                 </nav>
                 <div>
-                    <Link to="/login" className="btn-nav">Login</Link>
+                    <Link to="/login" className="btn-nav">Quick Login</Link>
                 </div>
             </header>
 
@@ -35,63 +43,94 @@ export default function Landingpage() {
                         className="btn-main"
                         onClick={() => document.getElementById('portal').scrollIntoView({ behavior: 'smooth' })}
                     >
-                        Explore Portals ↓
+                        Select Your Role ↓
                     </button>
                 </div>
             </section>
 
-            {/* PORTAL SECTION */}
+            {/* ROLE SELECTION SECTION */}
             <section id="portal" className="portal-section">
                 <div className="section-header">
-                    <h2 className="section-title">Select Your Gateway</h2>
+                    <h2 className="section-title">🔐 Select Your Access Portal</h2>
                     <p className="section-subtitle">
-                        Choose your personalized workspace to manage your day-to-day operations seamlessly.
+                        Choose your role to proceed with secure authentication and role-based access
                     </p>
                 </div>
 
                 <div className="grid-container">
                     {/* ADMIN PORTAL */}
-                    <div className="portal-card">
+                    <div 
+                        className={`portal-card ${selectedRole === 'admin' ? 'selected' : ''}`}
+                        onClick={() => handleRoleSelect('admin')}
+                    >
                         <div className="icon-wrapper admin-icon">🔑</div>
-                        <h3 className="card-title">Admin Terminal</h3>
+                        <h3 className="card-title">🏛️ Admin Terminal</h3>
                         <p className="card-description">
-                            Complete control center for system configurations, admissions, data management, and financial auditing.
+                            Complete control center for system configurations, admissions, user management, and analytics dashboard.
                         </p>
-                        <Link to="/login" className="card-btn admin-btn">
-                            Access System →
-                        </Link>
+                        <div className="access-features">
+                            <small>✓ Manage Students & Faculty</small>
+                            <small>✓ View Activity Analytics</small>
+                            <small>✓ Approve Accounts</small>
+                            <small>✓ System Configuration</small>
+                        </div>
+                        <button className="card-btn admin-btn">
+                            Access Admin →
+                        </button>
                     </div>
 
                     {/* FACULTY PORTAL */}
-                    <div className="portal-card">
+                    <div 
+                        className={`portal-card ${selectedRole === 'teacher' ? 'selected' : ''}`}
+                        onClick={() => handleRoleSelect('teacher')}
+                    >
                         <div className="icon-wrapper faculty-icon">📚</div>
-                        <h3 className="card-title">Faculty Portal</h3>
+                        <h3 className="card-title">👨‍🏫 Faculty Portal</h3>
                         <p className="card-description">
-                            Effortlessly track daily attendance, update grading structures, manage class updates, and schedule assignments.
+                            Effortlessly track attendance, manage student records, schedule classes, and monitor academic progress.
                         </p>
-                        <Link to="/login" className="card-btn faculty-btn">
+                        <div className="access-features">
+                            <small>✓ Student Management</small>
+                            <small>✓ Mark Attendance</small>
+                            <small>✓ View Activity Logs</small>
+                            <small>✓ Class Scheduling</small>
+                        </div>
+                        <button className="card-btn faculty-btn">
                             Enter Faculty Area →
-                        </Link>
+                        </button>
                     </div>
 
                     {/* STUDENT HUB */}
-                    <div className="portal-card">
+                    <div 
+                        className={`portal-card ${selectedRole === 'student' ? 'selected' : ''}`}
+                        onClick={() => handleRoleSelect('student')}
+                    >
                         <div className="icon-wrapper student-icon">🎓</div>
-                        <h3 className="card-title">Student Hub</h3>
+                        <h3 className="card-title">👨‍🎓 Student Portal</h3>
                         <p className="card-description">
-                            Your personalized space to view exam schedules, track performance analytics, and submit ongoing academic assignments.
+                            Your personalized space to view attendance, class schedules, track academic performance, and personal profile.
                         </p>
-                        <Link to="/login" className="card-btn student-btn">
+                        <div className="access-features">
+                            <small>✓ View Attendance</small>
+                            <small>✓ Class Schedule</small>
+                            <small>✓ Personal Timetable</small>
+                            <small>✓ Profile Management</small>
+                        </div>
+                        <button className="card-btn student-btn">
                             Open Student Space →
-                        </Link>
+                        </button>
                     </div>
+                </div>
+
+                <div className="role-note">
+                    <p>💡 <strong>Note:</strong> Student accounts require admin approval. Faculty accounts must be created by Admin only.</p>
                 </div>
             </section>
 
             {/* FEATURES SECTION */}
             <section id="features" className="features-section">
                 <div className="section-header">
-                    <h2 className="section-title">Why Choose Apna School?</h2>
+                    <h2 className="section-title">🌟 Why Choose Apna School?</h2>
                     <p className="section-subtitle">Modern tools designed for educational excellence</p>
                 </div>
                 <div className="features-grid">
@@ -102,8 +141,8 @@ export default function Landingpage() {
                     </div>
                     <div className="feature-item">
                         <div className="feature-icon">🔒</div>
-                        <h4>Secure</h4>
-                        <p>Bank-level security for student data</p>
+                        <h4>Secure & Monitored</h4>
+                        <p>Role-based access, activity tracking, approval workflows</p>
                     </div>
                     <div className="feature-item">
                         <div className="feature-icon">📱</div>
@@ -111,16 +150,16 @@ export default function Landingpage() {
                         <p>Works seamlessly on all devices</p>
                     </div>
                     <div className="feature-item">
-                        <div className="feature-icon">🎯</div>
+                        <div className="feature-icon">📊</div>
                         <h4>Smart Analytics</h4>
-                        <p>Detailed insights and performance tracking</p>
+                        <p>User activity tracking and detailed insights dashboard</p>
                     </div>
                 </div>
             </section>
 
             {/* FOOTER */}
             <footer className="footer">
-                <p>© 2026 Apna School Platform. Built for  modern education.</p>
+                <p>© 2026 Apna School Platform. Built for modern education.</p>
             </footer>
         </div>
     );

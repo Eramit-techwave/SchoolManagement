@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import AddStudent from './pages/AddStudent';
 import AddTeacher from './pages/AddTeacher';
 import EyeScanner from './pages/EyeScanner';
+import AdminAnalytics from './pages/AdminAnalytics';
 import Login from './pages/Login';
 import StudentDetail from './pages/StudentDetail';
 import TeacherDetail from './pages/TeacherDetail';
@@ -142,6 +143,11 @@ function App() {
                 {/* Settings: Sab log access kar sakte hain */}
                 <Route path="/settings" element={
                     <ProtectedRoute><Settings /></ProtectedRoute>
+                } />
+
+                {/* Admin Analytics: Sirf Admin */}
+                <Route path="/admin-analytics" element={
+                    <RoleRoute allowedRoles={['admin']}><AdminAnalytics /></RoleRoute>
                 } />
 
                 {/* Default redirect - agar logged in ho toh dashboard, nahi toh landing page */}
