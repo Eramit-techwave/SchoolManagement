@@ -23,6 +23,30 @@ function Settings() {
         setTimeout(() => setMessage(''), 3000);
     };
 
+    const styles = {
+        container: { display: 'flex', height: '100vh', background: '#FFFFFF', color: '#1e293b', fontFamily: "'Plus Jakarta Sans', sans-serif", overflow: 'hidden' },
+        mainContent: { flex: 1, padding: '30px 40px', overflowY: 'auto', background: '#fdfdfd' },
+        pageHeader: { marginBottom: '30px' },
+        pageTitle: { fontSize: '26px', fontWeight: 800, color: '#0f172a', margin: 0 },
+        pageDesc: { color: '#64748b', fontSize: '14px', marginTop: '5px' },
+        settingsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '25px' },
+        settingCard: { background: '#ffffff', borderRadius: '20px', border: '1px solid #e2e8f0', padding: '25px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' },
+        cardTitle: { fontSize: '16px', fontWeight: 800, color: '#0f172a', margin: '0 0 20px 0', display: 'flex', alignItems: 'center', gap: '10px' },
+        toggleGroup: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px', background: '#f8fafc', borderRadius: '12px', marginBottom: '15px' },
+        toggleLabel: { fontSize: '14px', fontWeight: 600, color: '#1e293b' },
+        toggleDescription: { fontSize: '12px', color: '#94a3b8', marginTop: '3px' },
+        toggleSwitch: (active) => ({ width: '50px', height: '28px', background: active ? '#10b981' : '#e2e8f0', borderRadius: '14px', border: 'none', cursor: 'pointer', position: 'relative', transition: '0.3s', display: 'flex', alignItems: 'center', padding: '2px' }),
+        toggleKnob: (active) => ({ width: '24px', height: '24px', background: 'white', borderRadius: '50%', transition: '0.3s', transform: active ? 'translateX(22px)' : 'none' }),
+        buttonGroup: { display: 'flex', gap: '15px' },
+        btnPrimary: { flex: 1, padding: '12px 20px', border: 'none', borderRadius: '12px', fontWeight: 800, fontSize: '13px', cursor: 'pointer', textTransform: 'uppercase', background: '#0f172a', color: '#00d2ff' },
+        btnSecondary: { background: '#f8fafc', color: '#64748b', border: '1px solid #e2e8f0', padding: '12px 20px', borderRadius: '12px', cursor: 'pointer' },
+        btnDanger: { background: '#e53935', color: 'white', padding: '12px 20px', borderRadius: '12px', cursor: 'pointer' },
+        formGroup: { marginBottom: '15px' },
+        formLabel: { display: 'block', fontSize: '12px', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', marginBottom: '8px' },
+        formInput: { width: '100%', padding: '10px 15px', border: '1px solid #e2e8f0', borderRadius: '12px', fontSize: '14px', background: '#f8fafc' },
+        messageSuccess: { padding: '15px', borderRadius: '12px', marginBottom: '20px', fontSize: '14px', textAlign: 'center', background: '#ecfdf5', color: '#10b981', border: '1px solid #d1fae5' },
+        messageError: { padding: '15px', borderRadius: '12px', marginBottom: '20px', fontSize: '14px', textAlign: 'center', background: '#fff1f2', color: '#e11d48', border: '1px solid #fee2e2' }
+    };
     const handleChangePassword = async (e) => {
         e.preventDefault();
         if (passwords.newPassword !== passwords.confirmPassword) {
@@ -36,252 +60,106 @@ function Settings() {
     };
 
     return (
-        <div className="tech-shell">
-            <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;800&display=swap');
-
-                .tech-shell {
-                    display: flex; height: 100vh; background: #FFFFFF; color: #1e293b;
-                    font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden;
-                }
-
-                /* SIDEBAR */
-                .sidebar {
-                    width: 75px; background: #0f172a; border-right: 1px solid #e2e8f0;
-                    display: flex; flex-direction: column; align-items: center; padding: 30px 0; gap: 20px;
-                }
-                .nav-link {
-                    width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
-                    border-radius: 14px; color: #94a3b8; text-decoration: none; font-size: 20px; transition: 0.3s;
-                }
-                .nav-link:hover, .nav-link.active { color: #00d2ff; background: rgba(0, 210, 255, 0.1); }
-
-                /* MAIN CONTENT */
-                .main-content { flex: 1; padding: 30px 40px; overflow-y: auto; background: #fdfdfd; }
-
-                .page-header { margin-bottom: 30px; }
-                .page-header h1 { font-size: 26px; font-weight: 800; color: #0f172a; margin: 0; }
-                .page-header p { color: #64748b; font-size: 14px; margin-top: 5px; }
-
-                /* SETTINGS GRID */
-                .settings-grid {
-                    display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-                    gap: 25px;
-                }
-
-                /* SETTING CARD */
-                .setting-card {
-                    background: #ffffff; border-radius: 20px; border: 1px solid #e2e8f0;
-                    padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-                }
-
-                .card-title {
-                    font-size: 16px; font-weight: 800; color: #0f172a; margin: 0 0 20px 0;
-                    display: flex; align-items: center; gap: 10px;
-                }
-
-                .card-title span {
-                    width: 10px; height: 10px; background: #00d2ff; border-radius: 50%;
-                }
-
-                /* TOGGLE SWITCH */
-                .toggle-group {
-                    display: flex; justify-content: space-between; align-items: center;
-                    padding: 15px; background: #f8fafc; border-radius: 12px; margin-bottom: 15px;
-                }
-
-                .toggle-label {
-                    font-size: 14px; font-weight: 600; color: #1e293b;
-                }
-
-                .toggle-description {
-                    font-size: 12px; color: #94a3b8; margin-top: 3px;
-                }
-
-                .toggle-switch {
-                    width: 50px; height: 28px; background: #e2e8f0; border-radius: 14px;
-                    border: none; cursor: pointer; position: relative; transition: 0.3s;
-                    display: flex; align-items: center; padding: 2px;
-                }
-
-                .toggle-switch.active {
-                    background: #10b981;
-                }
-
-                .toggle-knob {
-                    width: 24px; height: 24px; background: white; border-radius: 50%;
-                    transition: 0.3s;
-                }
-
-                .toggle-switch.active .toggle-knob {
-                    transform: translateX(22px);
-                }
-
-                /* BUTTONS */
-                .button-group {
-                    display: flex; gap: 15px;
-                }
-
-                .btn {
-                    flex: 1; padding: 12px 20px; border: none; border-radius: 12px;
-                    font-weight: 800; font-size: 13px; cursor: pointer; transition: 0.3s;
-                    text-transform: uppercase;
-                }
-
-                .btn-primary {
-                    background: #0f172a; color: #00d2ff;
-                }
-
-                .btn-primary:hover { background: #00d2ff; color: #0f172a; }
-
-                .btn-secondary {
-                    background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0;
-                }
-
-                .btn-secondary:hover { background: #e2e8f0; }
-
-                .btn-danger {
-                    background: #e53935; color: white; flex: 0 1 auto;
-                }
-
-                .btn-danger:hover { background: #c62828; }
-
-                /* FORM GROUP */
-                .form-group {
-                    margin-bottom: 15px;
-                }
-
-                .form-group label {
-                    display: block; font-size: 12px; font-weight: 800; color: #64748b;
-                    text-transform: uppercase; margin-bottom: 8px;
-                }
-
-                .form-group input {
-                    width: 100%; padding: 10px 15px; border: 1px solid #e2e8f0;
-                    border-radius: 12px; font-size: 14px; background: #f8fafc;
-                    transition: 0.3s;
-                }
-
-                .form-group input:focus {
-                    outline: none; border-color: #00d2ff; background: #ffffff;
-                }
-
-                /* MESSAGE */
-                .message {
-                    padding: 15px; border-radius: 12px; margin-bottom: 20px; font-size: 14px;
-                    text-align: center;
-                }
-
-                .message.success { background: #ecfdf5; color: #10b981; border: 1px solid #d1fae5; }
-                .message.error { background: #fff1f2; color: #e11d48; border: 1px solid #fee2e2; }
-            `}</style>
-
-            <aside className="sidebar">
-                <a href="/" className="nav-link" title="Dashboard">🏠</a>
-                <a href="/settings" className="nav-link active" title="Settings">⚙️</a>
-                <div style={{ marginTop: 'auto' }}>
-                    <a href="/profile" className="nav-link" title="Profile">👤</a>
-                </div>
-            </aside>
-
-            <main className="main-content">
+        <div style={styles.container}>
+            <main style={styles.mainContent}>
                 <div className="page-header">
-                    <h1>Settings</h1>
-                    <p>Customize your school management experience</p>
+                    <h1 style={styles.pageTitle}>Settings</h1>
+                    <p style={styles.pageDesc}>Customize your school management experience</p>
                 </div>
-
                 {message && (
-                    <div className={`message ${message.includes('successfully') ? 'success' : 'error'}`}>
+                    <div style={message.includes('successfully') ? styles.messageSuccess : styles.messageError}>
                         {message}
                     </div>
                 )}
 
-                <div className="settings-grid">
+                <div style={styles.settingsGrid}>
                     {/* PREFERENCES CARD */}
-                    <div className="setting-card">
-                        <h2 className="card-title"><span></span> Preferences</h2>
+                    <div style={styles.settingCard}>
+                        <h2 style={styles.cardTitle}><span></span> Preferences</h2>
 
-                        <div className="toggle-group">
+                        <div style={styles.toggleGroup}>
                             <div>
-                                <div className="toggle-label">Notifications</div>
-                                <div className="toggle-description">Receive system alerts</div>
+                                <div style={styles.toggleLabel}>Notifications</div>
+                                <div style={styles.toggleDescription}>Receive system alerts</div>
                             </div>
                             <button
-                                className={`toggle-switch ${notifications ? 'active' : ''}`}
+                                style={styles.toggleSwitch(notifications)}
                                 onClick={() => setNotifications(!notifications)}
                             >
-                                <div className="toggle-knob"></div>
+                                <div style={styles.toggleKnob(notifications)}></div>
                             </button>
                         </div>
 
-                        <div className="toggle-group">
+                        <div style={styles.toggleGroup}>
                             <div>
-                                <div className="toggle-label">Auto-Refresh</div>
-                                <div className="toggle-description">Refresh data automatically</div>
+                                <div style={styles.toggleLabel}>Auto-Refresh</div>
+                                <div style={styles.toggleDescription}>Refresh data automatically</div>
                             </div>
                             <button
-                                className={`toggle-switch ${autoRefresh ? 'active' : ''}`}
+                                style={styles.toggleSwitch(autoRefresh)}
                                 onClick={() => setAutoRefresh(!autoRefresh)}
                             >
-                                <div className="toggle-knob"></div>
+                                <div style={styles.toggleKnob(autoRefresh)}></div>
                             </button>
                         </div>
 
-                        <div className="button-group">
-                            <button className="btn btn-primary" onClick={handleSaveSettings}>
+                        <div style={styles.buttonGroup}>
+                            <button style={styles.btnPrimary} onClick={handleSaveSettings}>
                                 Save Settings
                             </button>
                         </div>
                     </div>
 
                     {/* SECURITY CARD */}
-                    <div className="setting-card">
-                        <h2 className="card-title"><span></span> Security</h2>
+                    <div style={styles.settingCard}>
+                        <h2 style={styles.cardTitle}><span></span> Security</h2>
 
                         {!showChangePassword ? (
                             <button
-                                className="btn btn-primary"
+                                style={{ ...styles.btnPrimary, width: '100%' }}
                                 onClick={() => setShowChangePassword(true)}
-                                style={{ width: '100%' }}
                             >
                                 Change Password
                             </button>
                         ) : (
                             <form onSubmit={handleChangePassword}>
-                                <div className="form-group">
-                                    <label>Current Password</label>
+                                <div style={styles.formGroup}>
+                                    <label style={styles.formLabel}>Current Password</label>
                                     <input
                                         type="password"
                                         value={passwords.oldPassword}
                                         onChange={(e) => setPasswords({...passwords, oldPassword: e.target.value})}
                                         required
+                                        style={styles.formInput}
                                     />
                                 </div>
-                                <div className="form-group">
-                                    <label>New Password</label>
+                                <div style={styles.formGroup}>
+                                    <label style={styles.formLabel}>New Password</label>
                                     <input
                                         type="password"
                                         value={passwords.newPassword}
                                         onChange={(e) => setPasswords({...passwords, newPassword: e.target.value})}
                                         required
+                                        style={styles.formInput}
                                     />
                                 </div>
-                                <div className="form-group">
-                                    <label>Confirm Password</label>
+                                <div style={styles.formGroup}>
+                                    <label style={styles.formLabel}>Confirm Password</label>
                                     <input
                                         type="password"
                                         value={passwords.confirmPassword}
                                         onChange={(e) => setPasswords({...passwords, confirmPassword: e.target.value})}
                                         required
+                                        style={styles.formInput}
                                     />
                                 </div>
-                                <div className="button-group">
-                                    <button type="submit" className="btn btn-primary">
+                                <div style={styles.buttonGroup}>
+                                    <button type="submit" style={styles.btnPrimary}>
                                         Update Password
                                     </button>
                                     <button
                                         type="button"
-                                        className="btn btn-secondary"
+                                        style={styles.btnSecondary}
                                         onClick={() => setShowChangePassword(false)}
                                     >
                                         Cancel
@@ -292,13 +170,13 @@ function Settings() {
                     </div>
 
                     {/* ACCOUNT CARD */}
-                    <div className="setting-card">
-                        <h2 className="card-title"><span></span> Account</h2>
+                    <div style={styles.settingCard}>
+                        <h2 style={styles.cardTitle}><span></span> Account</h2>
                         <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '20px' }}>
                             Logged in as: <strong>{user?.username}</strong> ({user?.role})
                         </p>
-                        <div className="button-group">
-                            <button className="btn btn-danger" onClick={logout}>
+                        <div style={styles.buttonGroup}>
+                            <button style={styles.btnDanger} onClick={logout}>
                                 Logout
                             </button>
                         </div>
