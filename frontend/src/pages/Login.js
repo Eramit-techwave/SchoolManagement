@@ -86,6 +86,9 @@ function Login() {
     // --- NEW FIXED & ANIMATED DESIGN STRUCTURE ---
     return (
         <div className="auth-page-wrapper">
+            <Link to="/landing" style={{ position: 'absolute', top: '20px', left: '20px', color: '#00d2ff', textDecoration: 'none', zIndex: 1001, display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.9rem' }}>
+                ← Back to Home
+            </Link>
             <style>{`
                 /* General Page Setup */
                 .auth-page-wrapper {
